@@ -1,0 +1,51 @@
+<div class="post">
+  <ion-item lines="none">
+    <ion-avatar slot="start">
+      <img src="/assets/avatars/{{ post.user?.avatar }}" />
+    </ion-avatar>
+
+    <ion-label>
+      <h3>{{ post.user?.name }}</h3>
+      <h5>{{ post.user?.email }}</h5>
+    </ion-label>
+  </ion-item>
+
+  <!-- ngIf imgs.... -->
+  <ion-slides pager="true" *ngIf="post.imgs && post.imgs.length > 1">
+    <ion-slide
+      *ngFor="let img of post.imgs"
+      class="image-slide"
+      [style]="
+        img | image : (post.user?._id ? post.user?._id : ('' | domSanitizer))
+      "
+    >
+    </ion-slide>
+  </ion-slides>
+
+  <ion-slides *ngIf="post.imgs?.length === 1" [options]="slideSoloOpts">
+    <ion-slide
+      class="image-slide"
+      [style]="
+        post.imgs?.length
+          ? ''
+          : (''
+            | image : (post.user?._id ? post.user?._id : ('' | domSanitizer)))
+      "
+    >
+    </ion-slide>
+  </ion-slides>
+
+  <!-- map -->
+  <app-map [coords]="post.coords" *ngIf="post.coords"></app-map>
+
+  <ion-item lines="none">
+    <ion-icon slot="start" name="heart-outline"></ion-icon>
+    <ion-icon slot="end" name="bookmark"></ion-icon>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label text-wrap>
+      {{ post.msg }}
+    </ion-label>
+  </ion-item>
+</div>
