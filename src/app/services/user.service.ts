@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
-import { environment } from '../../environments/environment';
-import { User } from '../interfaces/interfaces';
 import { NavController } from '@ionic/angular';
+
+import { User } from '../interfaces/interfaces';
+
+import { environment } from '../../environments/environment';
 
 const URL = environment.url;
 

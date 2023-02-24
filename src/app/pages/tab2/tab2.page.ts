@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { PostsService } from '../../services/posts.service';
 import { Router } from '@angular/router';
 
-/* import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx'; */
+import { Capacitor } from '@capacitor/core';
+import { Geolocation } from '@capacitor/geolocation';
+// import { Camera, CameraOptions } from '@ionic-native/camera/ngx'; */
 
 declare var window: any;
 
@@ -18,23 +19,21 @@ export class Tab2Page {
 
   post = {
     msg: '',
-    coords: null,
+    coords: '',
     posicion: false,
   };
 
   constructor(
     private postsService: PostsService,
-    private route: Router,
-    // private geolocation: Geolocation
-  ) // private camera: Camera
-  {}
+    private route: Router // private camera: Camera
+  ) {}
 
   async crearPost() {
     const creado = await this.postsService.crearPost(this.post);
 
     this.post = {
       msg: '',
-      coords: null,
+      coords: '',
       posicion: false,
     };
 
@@ -45,26 +44,26 @@ export class Tab2Page {
 
   getGeo() {
     if (!this.post.posicion) {
-      this.post.coords = null;
+      this.post.coords = '';
       return;
     }
 
     this.cargandoGeo = true;
 
-    // this.geolocation
-    //   .getCurrentPosition()
-    //   .then((resp) => {
-    //     // resp.coords.latitude
-    //     // resp.coords.longitude
-    //     this.cargandoGeo = false;
+    if (!Capacitor.isPluginAvailable('Geolocation')) {
+      console.log('Plugin geolocation not available');
+      return;
+    }
 
-    //     const coords = `${resp.coords.latitude},${resp.coords.longitude}`;
-    //     this.post.coords = coords;
-    //   })
-    //   .catch((error) => {
-    //     console.log('Error getting location', error);
-    //     this.cargandoGeo = false;
-    //   });
+    Geolocation.getCurrentPosition()
+      .then((resp: any) => {
+        this.cargandoGeo = false;
+        const coords = `${resp.coords.latitude},${resp.coords.longitude}`;
+        this.post.coords = coords;
+      })
+      .catch((err: any) => {
+        console.error(err);
+      });
   }
 
   camara() {

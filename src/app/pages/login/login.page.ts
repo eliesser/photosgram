@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { IonSlides, NavController } from '@ionic/angular';
-import { UserService } from '../../services/user.service';
+
+import { UserService } from 'src/app/services/user.service';
 import { UiServiceService } from 'src/app/services/ui-service.service';
+
 import { User } from '../../interfaces/interfaces';
 
 @Component({
