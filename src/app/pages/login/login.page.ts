@@ -21,6 +21,7 @@ export class LoginPage implements OnInit {
   };
 
   registerUser: User = {
+    _id: '',
     email: 'freiteseliesser@hotmail.com',
     password: '123456',
     name: 'Eliesser Freites',

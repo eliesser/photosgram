@@ -14,7 +14,7 @@ const URL = environment.url;
 })
 export class UserService {
   token: string = '';
-  private user: User = {};
+  private user: User = {_id: ''};
 
   constructor(
     private http: HttpClient,
@@ -41,7 +41,7 @@ export class UserService {
 
   logout() {
     this.token = '';
-    this.user = {};
+    this.user = { _id: '' };
     this.storage.clear();
     this.navCtrl.navigateRoot('/login', { animated: true });
   }

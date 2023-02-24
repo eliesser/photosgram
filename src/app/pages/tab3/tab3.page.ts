@@ -11,7 +11,7 @@ import { PostsService } from '../../services/posts.service';
   styleUrls: ['tab3.page.scss'],
 })
 export class Tab3Page implements OnInit {
-  user: User = { avatar: '' };
+  user: User = { _id: '', avatar: '' };
 
   constructor(
     private UserService: UserService,

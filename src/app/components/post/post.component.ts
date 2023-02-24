@@ -8,18 +8,9 @@ import { Post } from '../../interfaces/interfaces';
 })
 export class PostComponent implements OnInit {
   @Input() post: Post = {
-    imgs: [],
-    _id: '',
-    msg: '',
-    coords: '',
     user: {
-      avatar: '',
       _id: '',
-      name: '',
-      email: '',
-      password: '',
     },
-    created: '',
   };
 
   slideSoloOpts = {

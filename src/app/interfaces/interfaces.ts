@@ -9,13 +9,13 @@ export interface Post {
   _id?: string;
   msg?: string;
   coords?: string;
-  user?: User;
   created?: string;
+  user: User;
 }
 
 export interface User {
+  _id: string;
   avatar?: string;
-  _id?: string;
   name?: string;
   email?: string;
   password?: string;
