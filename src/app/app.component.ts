@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
-// import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-// import { StatusBar } from '@ionic-native/status-bar/ngx';
+
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  public appPages = [
+  appPages = [
     { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
     { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
     { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
@@ -19,24 +20,19 @@ export class AppComponent {
     { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
     { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor(
-    private platform: Platform,
-    private storage: Storage // private splashScreen: SplashScreen, // private statusBar: StatusBar
-  ) {
+
+  labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+
+  constructor(private platform: Platform, private storage: Storage) {
     this.initializeApp();
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
-      // this.statusBar.styleDefault();
-      // this.splashScreen.hide();
+    this.platform.ready().then(async () => {
+      await this.storage.create();
+      await SplashScreen.hide();
+      if(this.platform.is('desktop'))
+        StatusBar.setStyle({ style: Style.Default });
     });
-  }
-
-  async ngOnInit() {
-    // If using a custom driver:
-    // await this.storage.defineDriver(MyCustomDriver)
-    await this.storage.create();
   }
 }
