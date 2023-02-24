@@ -29,10 +29,7 @@ export class Tab2Page {
     posicion: false,
   };
 
-  constructor(
-    private postsService: PostsService,
-    private route: Router
-  ) {}
+  constructor(private postsService: PostsService, private route: Router) {}
 
   async crearPost() {
     const creado = await this.postsService.crearPost(this.post);
@@ -83,7 +80,7 @@ export class Tab2Page {
     Camera.getPhoto(options).then(
       (imageData: any) => {
         const img = window.Ionic.WebView.convertFileSrc(imageData.dataUrl);
-        this.postsService.subirImage(imageData.dataUrl);
+        this.postsService.subirImage(img);
         this.tempImages.push(img);
       },
       (err: any) => {
@@ -100,9 +97,16 @@ export class Tab2Page {
     Camera.pickImages(options).then(
       (imageData: any) => {
         imageData.photos.forEach((photo: any) => {
-          const img = window.Ionic.WebView.convertFileSrc(photo.webPath);
-          this.postsService.subirImage(photo.dataUrl);
-          this.tempImages.push(img);
+          this.postsService.getBase64FromUrl(photo.webPath).then(
+            (base64: any) => {
+              const img = window.Ionic.WebView.convertFileSrc(base64);
+              this.postsService.subirImage(img);
+              this.tempImages.push(img);
+            },
+            (err: any) => {
+              console.log(err);
+            }
+          );
         });
       },
       (err: any) => {
