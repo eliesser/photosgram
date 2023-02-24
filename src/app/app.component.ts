@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 // import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 // import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -19,9 +20,10 @@ export class AppComponent {
     { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor(private platform: Platform) // private splashScreen: SplashScreen,
-  // private statusBar: StatusBar
-  {
+  constructor(
+    private platform: Platform,
+    private storage: Storage // private splashScreen: SplashScreen, // private statusBar: StatusBar
+  ) {
     this.initializeApp();
   }
 
@@ -30,5 +32,11 @@ export class AppComponent {
       // this.statusBar.styleDefault();
       // this.splashScreen.hide();
     });
+  }
+
+  async ngOnInit() {
+    // If using a custom driver:
+    // await this.storage.defineDriver(MyCustomDriver)
+    await this.storage.create();
   }
 }

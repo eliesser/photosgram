@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-// import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage';
 import { environment } from '../../environments/environment';
 import { User } from '../interfaces/interfaces';
 import { NavController } from '@ionic/angular';
@@ -16,7 +16,7 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    // private storage: Storage,
+    private storage: Storage,
     private navCtrl: NavController
   ) {}
 
@@ -30,7 +30,7 @@ export class UserService {
           resolve(true);
         } else {
           this.token = '';
-          // this.storage.clear();
+          this.storage.clear();
           resolve(false);
         }
       });
@@ -40,7 +40,7 @@ export class UserService {
   logout() {
     this.token = '';
     this.user = {};
-    // this.storage.clear();
+    this.storage.clear();
     this.navCtrl.navigateRoot('/login', { animated: true });
   }
 
@@ -54,7 +54,7 @@ export class UserService {
             resolve(true);
           } else {
             this.token = '';
-            // this.storage.clear();
+            this.storage.clear();
             resolve(false);
           }
         });
@@ -71,13 +71,13 @@ export class UserService {
 
   async guardarToken(token: string) {
     this.token = token;
-    // await this.storage.set('token', token);
+    await this.storage.set('token', token);
 
     await this.validaToken();
   }
 
   async cargarToken() {
-    // this.token = (await this.storage.get('token')) || null;
+    this.token = (await this.storage.get('token')) || null;
   }
 
   async validaToken(): Promise<boolean> {
@@ -112,7 +112,7 @@ export class UserService {
 
     return new Promise((resolve) => {
       this.http
-        .post(`${URL}/user/update`, user, { headers })
+        .put(`${URL}/user/update`, user, { headers })
         .subscribe((resp: any) => {
           if (resp['ok']) {
             this.guardarToken(resp['token']);
