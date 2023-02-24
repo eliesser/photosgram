@@ -4,7 +4,13 @@ import { Router } from '@angular/router';
 
 import { Capacitor } from '@capacitor/core';
 import { Geolocation } from '@capacitor/geolocation';
-// import { Camera, CameraOptions } from '@ionic-native/camera/ngx'; */
+import {
+  Camera,
+  CameraResultType,
+  CameraSource,
+  GalleryImageOptions,
+  ImageOptions,
+} from '@capacitor/camera';
 
 declare var window: any;
 
@@ -25,7 +31,7 @@ export class Tab2Page {
 
   constructor(
     private postsService: PostsService,
-    private route: Router // private camera: Camera
+    private route: Router
   ) {}
 
   async crearPost() {
@@ -67,41 +73,41 @@ export class Tab2Page {
   }
 
   camara() {
-    // const options: CameraOptions = {
-    //   quality: 60,
-    //   destinationType: this.camera.DestinationType.FILE_URI,
-    //   encodingType: this.camera.EncodingType.JPEG,
-    //   mediaType: this.camera.MediaType.PICTURE,
-    //   correctOrientation: true,
-    //   sourceType: this.camera.PictureSourceType.CAMERA,
-    // };
-    // this.procesarImage(options);
+    const options: ImageOptions = {
+      quality: 60,
+      correctOrientation: true,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Camera,
+    };
+
+    Camera.getPhoto(options).then(
+      (imageData: any) => {
+        const img = window.Ionic.WebView.convertFileSrc(imageData.dataUrl);
+        this.postsService.subirImage(imageData.dataUrl);
+        this.tempImages.push(img);
+      },
+      (err: any) => {
+        console.log(err);
+      }
+    );
   }
 
   libreria() {
-    // const options: CameraOptions = {
-    //   quality: 60,
-    //   destinationType: this.camera.DestinationType.FILE_URI,
-    //   encodingType: this.camera.EncodingType.JPEG,
-    //   mediaType: this.camera.MediaType.PICTURE,
-    //   correctOrientation: true,
-    //   sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-    // };
-    // this.procesarImage(options);
-  }
+    const options: GalleryImageOptions = {
+      quality: 60,
+    };
 
-  procesarImage(/* options: CameraOptions */) {
-    // this.camera.getPicture(options).then(
-    //   (imageData) => {
-    //     // imageData is either a base64 encoded string or a file URI
-    //     // If it's base64 (DATA_URL):
-    //     const img = window.Ionic.WebView.convertFileSrc(imageData);
-    //     this.postsService.subirImage(imageData);
-    //     this.tempImages.push(img);
-    //   },
-    //   (err) => {
-    //     // Handle error
-    //   }
-    // );
+    Camera.pickImages(options).then(
+      (imageData: any) => {
+        imageData.photos.forEach((photo: any) => {
+          const img = window.Ionic.WebView.convertFileSrc(photo.webPath);
+          this.postsService.subirImage(photo.dataUrl);
+          this.tempImages.push(img);
+        });
+      },
+      (err: any) => {
+        console.log(err);
+      }
+    );
   }
 }
